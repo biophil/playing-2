@@ -13,7 +13,7 @@ pollutantmean <- function(directory = "specdata", pollutant, id = 1:332) {
     ## in the 'id' vector (ignoring NA values)
     ## NOTE: Do not round the result!
     
-    toRet <- numeric(length(id))
+    toRet <- numeric()
     for(i in id) {
         if(i<10){
             prefix <- "00"
@@ -26,7 +26,7 @@ pollutantmean <- function(directory = "specdata", pollutant, id = 1:332) {
         # print(fname)
         this.data <- read.csv(fname)
         polvec <- this.data[[pollutant]]
-        toRet[i] <- mean(polvec[!is.na(polvec)]) ## PROBLEM: it's indexing when it should be appending
+        toRet <- append(toRet,polvec[!is.na(polvec)]) 
     }
-    toRet
+    mean(toRet)
 }
