@@ -14,15 +14,15 @@ pollutantmean <- function(directory = "specdata", pollutant, id = 1:332) {
     ## NOTE: Do not round the result!
     
     toRet <- numeric(length(id))
-    for(i in id) {
-        if(i<10){
+    for(i in seq_along(id)) {
+        if(id[i]<10){
             prefix <- "00"
-        } else if(i<100) {
+        } else if(id[i]<100) {
                 prefix <- "0"
         } else {
             prefix <- ""
         }
-        fname <- paste(directory,"/",prefix,as.character(i),".csv", sep="")
+        fname <- paste(directory,"/",prefix,as.character(id[i]),".csv", sep="")
         # print(fname)
         this.data <- read.csv(fname)
         polvec <- this.data[[pollutant]]
