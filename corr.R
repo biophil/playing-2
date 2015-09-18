@@ -9,4 +9,28 @@ corr <- function(directory, threshold = 0) {
     
     ## Return a numeric vector of correlations
     ## NOTE: Do not round the result!
+    
+    compObs <- complete(directory)
+    allIds <- 1:332
+    idToCheck <- allIds[compObs$nobs>threshold] # these are the ids with enough observations
+    
+    sulfAll = numeric() # init empty sulf and nit vectors
+    nitAll = numeric()
+    for(i in idToCheck) {
+        if(i<10){           # build filename
+            prefix <- "00"
+        } else if(i<100) {
+            prefix <- "0"
+        } else {
+            prefix <- ""
+        }
+        fname <- paste(directory,"/",prefix,as.character(i),".csv", sep="")
+        #print(fname)
+        this.data <- read.csv(fname) # get data
+        sulfvec <- this.data[['sulfate']] # raw sulf and nit from file
+        nitvec <- this.data[['nitrate']]
+        sulfAll <- append(sulfAll,sulfvec[!is.na(sulfvec) & !is.na(nitvec)]) # save if complete
+        nitAll <- append(nitAll,nitvec[!is.na(sulfvec) & !is.na(nitvec)])
+    }
+    cor(sulfAll,nitAll)
 }
